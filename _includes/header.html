@@ -12,16 +12,17 @@
 
             {% assign pages = site.pages | sort:"weight"  %}
             {% for my_page in pages %}
+                {% if my_page.menuvisible %}
+                    {% if my_page.menutitle %}
+                    {% assign title = my_page.menutitle %}
+                    {% elsif site.title %}
+                    {% assign title = my_page.title %}
+                    {% endif %}
 
-            {% if my_page.menutitle %}
-            {% assign title = my_page.menutitle %}
-            {% elsif site.title %}
-            {% assign title = my_page.title %}
-            {% endif %}
-
-            {% if title and my_page.visible != false %}
-            <a class="page-link" href="{{ my_page.url | absolute_url }}" title="{{ title }}">{{ title }}</a>
-            {% endif %}
+                    {% if title and my_page.visible != false %}
+                    <a class="page-link" href="{{ my_page.url | absolute_url }}" title="{{ title }}">{{ title }}</a>
+                    {% endif %}
+                {% endif %}
             {% endfor %}
     </div>
 </header>
