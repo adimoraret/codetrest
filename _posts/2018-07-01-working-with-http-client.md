@@ -4,7 +4,7 @@ title:              "Working with HttpClient"
 menutitle:          "Working with HttpClient"
 date:               2017-07-01 07:23:00
 category:           CSharp
-author:             Adrian Moraret
+author:             adimoraret
 language:           EN
 comments:           false
 published:          true
