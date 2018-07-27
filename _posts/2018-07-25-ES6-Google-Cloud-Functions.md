@@ -28,7 +28,7 @@ Project contains 3 files:
 
 ### Changes in serverless.yml ###
 
-```yaml
+```bash
 service: serverless-es6
 
 provider:
