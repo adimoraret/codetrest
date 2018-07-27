@@ -91,3 +91,5 @@ Locally
 
 Or in the cloud after deploy (``` serverless deploy ```)
 ![run aws es6 function in aws](/assets/posts/2018-07-25/serverless-run-lambda-function-in-aws.png)
+
+Full example can be found on [GitHub](https://github.com/adimoraret/serverless-aws-es6-demo)
