@@ -85,7 +85,7 @@ Inside of the terminal, navigate to project folder and run the following
 1. npm install webpack serverless-webpack --save-dev
 ```
 
-## Run your function ##
+## Run lambda function ##
 Locally
 ![run lambda function locally](/assets/posts/2018-07-25/serverless-run-lambda-function-locally.png)
 
