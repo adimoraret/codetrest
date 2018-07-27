@@ -24,35 +24,70 @@ Project contains 3 files:
 * handler.js
 * serverless.yml
 
-## Configure ES6 ##
+## Configure ES6 function to run as a Lambda Function ##
 
 ### Changes in serverless.yml ###
-1. Change ```runtime: nodejs6.10``` to ```runtime: nodejs8.10```
-1. Add plugins section and include [serverless-webpack](https://github.com/serverless-heaven/serverless-webpack) plugin
 
-```yml
+```yaml
+service: serverless-es6
+
+provider:
+  name: aws
+  runtime: nodejs8.10 # Change from nodejs6.10 to nodejs8.10
+
 plugins:
   - serverless-webpack
-```
-1. Create a function which gets triggered by a http event
 
-```yml
 functions:
-  news:
+  news: # Create a news function which gets triggered by a http event
     handler: handler.news
     events:
       - http:
           path: /news
           method: get
-```
-### Changes in handler.js ###
 
+custom: # Add custom section and include webpack configuration
+    webpack:
+      webpackConfig: 'webpack.config.js'
+      includeModules: false
+```
+
+### Changes in handler.js ###
+Add a javascript function and make sure you have some ES6 features
+```javascript
+export function news(event, context, callback) {
+
+  const happyDay = () => 'Friday'
+  const buildColor = 'green'
+  const goodNews = [`Today is ${happyDay()}`, `Build is ${buildColor}`]
+
+  callback(null, {
+    statusCode: 200,
+    body: JSON.stringify(goodNews),
+  })
+}
+```
+
+### Create webpack.config.js ###
+webpack.config.js file is usually at the same level with package.config file. If you want to change the location, you need to update serverless.yml file with the new location.
+```javascript
+module.exports = {
+  entry: { handler: './handler.js' },
+  target: 'node',
+  mode: 'development'
+}
+```
 
 ### Install npm packages ###
 Inside of the terminal, navigate to project folder and run the following
 ```bash
 1. npm init
-1. npm install webpack serverless-webpack webpack-node-externals --save-dev
-1. npm install babel babel-cli babel-loader babel-core babel-preset-env --save-dev
-1. npm install aws-sdk --save-dev
+1. npm install webpack serverless-webpack --save-dev
 ```
+
+## Run your function ##
+Locally
+![run lambda function locally](/assets/posts/2018-07-25/serverless-run-lambda-function-locally.png)
+
+Or in the cloud after deploy (``` serverless deploy ```)
+![run aws es6 function in aws](/assets/posts/2018-07-25/serverless-run-lambda-function-in-aws.png)
