@@ -39,4 +39,3 @@ compress_html:
   ignore:
     envs: [local]
   blanklines: true
-  startings: [head, body]
