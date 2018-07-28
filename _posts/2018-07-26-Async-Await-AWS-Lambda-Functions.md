@@ -10,9 +10,9 @@ comments:           false
 published:          true
 ---
 ## What I will implement ##
-Using ES6 async and await, I will implement an AWS lambda function that gets the latest Jobs from HackerNews. I will use [HackerNews API](https://github.com/HackerNews/API).
+Using [Serverless framework](https://serverless.com/framework/docs/), ES6, async and await, I will implement an AWS lambda function that gets the latest Jobs from HackerNews. I will use [HackerNews API](https://github.com/HackerNews/API).
 
-I'll clone a sample lambda function project and I'll install ```node-fetch``` which is a library to create http requests and it supports promises. This npm package is equivalent to window.fetch which can be used in regular ES6 code inside the browser. 
+I'll clone a sample lambda function project created in this [article](/ES6-Code-AWS-Lambda) and I'll install ```node-fetch``` which is a library to create http requests and it supports promises. This npm package is equivalent to window.fetch which can be used in regular ES6 code inside the browser. 
 
 ```bash
 git clone https://github.com/adimoraret/serverless-aws-es6-demo.git serverless-aws-async-await
