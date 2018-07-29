@@ -11,7 +11,7 @@ published:          false
 todo: Rename title, find 2 minutest time_wait settings;
 ---
 (in progress...)
-HttpClient looked very easy to use. Luckily before using it, I did a little research. Here are the most important findings(in my opinion) about using HttpClient:
+HttpClient looked very easy to use. Luckily before using it, I did a little research. Here are the most important findings about using HttpClient:
 * use HttpClient as a singleton object
 * don't use Default properties like timeout or headers unless you're 100% sure the same settings will be used for all your HttpClient calls
 * use HttpClient async methods
