@@ -83,6 +83,10 @@ npm install serverless-google-cloudfunctions --save-dev
 serverless deploy
 ```
 At this moment, since there is no possibility to set NodeJs runtime version, we'll get the following error
+
+```json
+{"ResourceType":"cloudfunctions.v1beta2.function","ResourceErrorCode":"400","ResourceErrorMessage":"Function load error: Code in file index.js can't be loaded.\nIs there a syntax error in your code?\nDetailed stack trace: SyntaxError: Unexpected token function\n    at Object../index.js (/user_code/index.js:109:1)\n    at __webpack_require__ (/user_code/index.js:20:30)\n    at /user_code/index.js:84:18\n    at Object.<anonymous> (/user_code/index.js:87:10)\n    at Module._compile (module.js:577:32)\n    at Object.Module._extensions..js (module.js:586:10)\n    at Module.load (module.js:494:32)\n    at tryModuleLoad (module.js:453:12)\n    at Function.Module._load (module.js:445:3)\n    at Module.require (module.js:504:17)"}
+```
 ![serverless deploy error in gcp](/assets/posts/2018-07-27/serverless-deploy-error-gcp.png)
 
 And if we look in Google Cloud Functions we'll see something like this
