@@ -10,10 +10,10 @@ title:            Codetrest
 subtitle:         Cloud, TDD, CI, CD, CSharp, JavaScript and more
 description:      codetrest.com
 keywords:         codetrest
-language:         "en" # default language of the blog. Language codes: http://www.w3schools.com/tags/ref_language_codes.asp
+language:         "en"
 
-baseurl:          "" # the subpath of your site, e.g. /blog
-url:              "" # the base hostname & protocol for your site. Have a look at robots.txt as well!
+baseurl:          ""
+url:              ""
 permalink:        /:title
 cover:            /assets/background.jpg
 disqus_shortname: "Codetrest"
