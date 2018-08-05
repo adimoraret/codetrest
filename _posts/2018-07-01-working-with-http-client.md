@@ -10,7 +10,6 @@ comments:           false
 published:          false
 todo: Rename title, find 2 minutest time_wait settings;
 ---
-(in progress...)
 HttpClient looked very easy to use. Luckily before using it, I did a little research. Here are the most important findings about using HttpClient:
 * use HttpClient as a singleton object
 * don't use Default properties like timeout or headers unless you're 100% sure the same settings will be used for all your HttpClient calls
@@ -27,7 +26,7 @@ using(var httpClient = new HttpClient())
     Console.WriteLine(result.StatusCode);
 }
 ```
-This would work, but the problem with this is that even after application ends and connections will remain in a TIME_WAIT state for a while (depending on your setting TODO). 
+This would work, but the problem with this is that even after application ends and connections will remain in a TIME_WAIT state for a while. 
 Here is an example with 10 http parallel requests.
 ```csharp
 public class Program
