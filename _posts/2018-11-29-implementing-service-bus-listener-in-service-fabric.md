@@ -1,13 +1,13 @@
 ---
 layout:             post
-title:              "Create service fabric stateless service with service bus"
-menutitle:          "Create service fabric stateless service with service bus"
-date:               2018-11-30 07:23:00
+title:              "Implementing Service Bus listener in Service Fabric"
+menutitle:          "Implementing Service Bus listener in Service Fabric"
+date:               2018-11-29 07:23:00
 category:           Azure
 author:             adimoraret
 language:           EN
 comments:           false
-published:          false
+published:          true
 ---
 ## What I will implement ##
 I'll create a Service Fabric stateless service in .Net Core 2.1. This service will be connected to an Azure Service Bus queue. I'll use Microsoft.Extensions.DependencyInjection for IoC and Microsoft.Extensions.Configuration to read application configuration file. 
@@ -28,29 +28,39 @@ Selecting stateless service
 ## Adding Dependency Injection and configuration ##
 When the stateless service is generate it comes with the following code:
 ```csharp
-  ServiceRuntime.RegisterServiceAsync("ServiceBusProcessorType",
-      context => new ServiceBusProcessor(context)).GetAwaiter().GetResult();
+ServiceRuntime.RegisterServiceAsync("ServiceBusProcessorType",
+    context => new ServiceBusProcessor(context))
+        .GetAwaiter().GetResult();
 ```
-I'll extract ```new ServiceBusProcessor(context))``` into a method so code becomes:
+I'll extract ```new ServiceBusProcessor(context))``` into a method and the code becomes:
 ```csharp
-  ServiceRuntime.RegisterServiceAsync("ServiceBusProcessorType",
-      context => CreateServiceBusProcessor(context)).GetAwaiter().GetResult();
-  //some code
-  private static ServiceBusProcessor CreateServiceBusProcessor(StatelessServiceContext context)
-  {
-      return new ServiceBusProcessor(context);
-  }
+ServiceRuntime.RegisterServiceAsync("ServiceBusProcessorType",
+    context => CreateServiceBusProcessor(context))
+    .GetAwaiter().GetResult();
+//some code    
+private static ServiceBusProcessor CreateServiceBusProcessor(
+    StatelessServiceContext context)
+{
+    return new ServiceBusProcessor(context);
+}
 ```
-Now I'll install Microsoft.Extensions.DependencyInjection, Microsoft.Extensions.Configuration, Microsoft.Extensions.Configuration.Json, Microsoft.Azure.ServiceBus and Microsoft.Extensions.PlatformAbstractions into ServiceBusProcessor. 
+Now in ServiceBusProcessor, I'll install the following NuGet packages
+* Microsoft.Extensions.DependencyInjection, 
+* Microsoft.Extensions.Configuration, 
+* Microsoft.Extensions.Configuration.Json, 
+* Microsoft.Azure.ServiceBus and 
+* Microsoft.Extensions.PlatformAbstractions 
+
 ![solution after nuget package installation](/assets/posts/2018-11-30/solution-after-nuget-package-installation.png)
 
 Next I'll create a method to resolve current environment name. In case it's not defined it will default it to Development
 ```csharp
-  private static string GetEnvironmentName()
-  {
-      var environment = Environment.GetEnvironmentVariable("SERVICE_FABRIC_ENVIRONMENT");
-      return string.IsNullOrEmpty(environment) ? "Development" : environment;
-  }
+private static string GetEnvironmentName()
+{
+    var environment = 
+        Environment.GetEnvironmentVariable("SERVICE_FABRIC_ENVIRONMENT");
+    return string.IsNullOrEmpty(environment) ? "Development" : environment;
+}
 ```
 It's always a must to have environmental based configuration. I really like the new application configuration structure introduced by .NET Core. So I'll create 3 application configuration files and I'll make sure they're copied to output directory (right click -> properties):
 * appsettings.Development.json
@@ -58,22 +68,26 @@ It's always a must to have environmental based configuration. I really like the 
 * appsettings.Production.json
 And here is how we can reference them from our service depending on the environment.
 ```csharp
-  private static IConfigurationRoot GetConfiguration()
-  {
-      var environmentName = GetEnvironmentName();
-      var basePath = PlatformServices.Default.Application.ApplicationBasePath;
-      var configurationBuilder = new ConfigurationBuilder()
-          .SetBasePath(basePath)
-          .AddJsonFile($"appsettings.{environmentName}.json");
+private static IConfigurationRoot GetConfiguration()
+{
+    var environmentName = GetEnvironmentName();
+    var basePath = PlatformServices.Default
+        .Application.ApplicationBasePath;
+    var configurationBuilder = new ConfigurationBuilder()
+        .SetBasePath(basePath)
+        .AddJsonFile($"appsettings.{environmentName}.json");
 
-      return configurationBuilder.Build();
-  }
+    return configurationBuilder.Build();
+}
 ```
 Now, let's do IoC. I'm creating the following class.
 ```csharp
-  internal static class Startup
-  {
-    public static void ConfigureIoc(ServiceCollection services, IConfiguration configuration, StatelessServiceContext context)
+internal static class Startup
+{
+    public static void ConfigureIoc(
+        ServiceCollection services, 
+        IConfiguration configuration, 
+        StatelessServiceContext context)
     {
         services.AddSingleton<ServiceContext>(context);
         services.AddSingleton<StatelessServiceContext>(context);
@@ -82,23 +96,27 @@ Now, let's do IoC. I'm creating the following class.
         services.AddTransient<IQueueClient>( s =>
         {
             var config = s.GetService<IConfiguration>();
-            var messageBusSection = config.GetSection("AppSettings:MessageBus");
-            var connectionString = messageBusSection["ConnectionString"];
+            var messageBusSection = config
+                .GetSection("AppSettings:MessageBus");
+            var connectionString = 
+                messageBusSection["ConnectionString"];
             var queue = messageBusSection["Queue"];
             return new QueueClient(connectionString, queue);
         });
     }
-  }
+}
 ```
 And inside of the main class we'll integrate it like this:
 ```csharp
   //and the very first method we created
-  private static ServiceBusProcessor CreateServiceBusProcessor(StatelessServiceContext context)
+  private static ServiceBusProcessor CreateServiceBusProcessor(
+    StatelessServiceContext context)
   {
       return new ServiceBusProcessor(context);
   }
   //becomes
-  private static ServiceBusProcessor CreateServiceBusProcessor(StatelessServiceContext context)
+  private static ServiceBusProcessor CreateServiceBusProcessor(
+    StatelessServiceContext context)
   {
       var services = new ServiceCollection();
       var configuration = GetConfiguration();
@@ -115,33 +133,42 @@ In ServiceBusProcessor.cs we'll take advantage of IoC and we'll include IQueueCl
   {
       private readonly IQueueClient _queueClient;
 
-      public ServiceBusProcessor(StatelessServiceContext context, IQueueClient queueClient)
+      public ServiceBusProcessor(
+        StatelessServiceContext context, 
+        IQueueClient queueClient)
           : base(context)
       {
           _queueClient = queueClient;
       }
 
-      protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
+      protected override IEnumerable<ServiceInstanceListener> 
+        CreateServiceInstanceListeners()
       {
           return new ServiceInstanceListener[0];
       }
 
-      protected override async Task RunAsync(CancellationToken cancellationToken)
+      protected override async Task RunAsync(
+        CancellationToken cancellationToken)
       {
-          await Task.Run(() => Configure(OnMessageReceived, OnExceptionThrown), cancellationToken);
+          await Task.Run(() => Configure(OnMessageReceived, 
+            OnExceptionThrown), cancellationToken);
       }
 
       private void OnMessageReceived(string label, string message)
       {
-          ServiceEventSource.Current.ServiceMessage(Context, $"Received message: {message} label: {label}");
+          ServiceEventSource.Current.ServiceMessage(Context, 
+            $"Received message: {message} label: {label}");
       }
 
       private void OnExceptionThrown(Exception exception)
       {
-          ServiceEventSource.Current.ServiceMessage(Context, $"Exception: {exception}");
+          ServiceEventSource.Current.ServiceMessage(Context,
+            $"Exception: {exception}");
       }
 
-      private void Configure(Action<string, string> onMessageReceived, Action<Exception> onExceptionThrown)
+      private void Configure(
+        Action<string, string> onMessageReceived,
+        Action<Exception> onExceptionThrown)
       {
           var options = new MessageHandlerOptions(e =>
           {
@@ -157,7 +184,8 @@ In ServiceBusProcessor.cs we'll take advantage of IoC and we'll include IQueueCl
               var messageBody = Encoding.UTF8.GetString(message.Body);
               var label = message.Label;
               onMessageReceived(label, messageBody);
-              await _queueClient.CompleteAsync(message.SystemProperties.LockToken);
+              await _queueClient.CompleteAsync
+                (message.SystemProperties.LockToken);
           }, options);
       }
   }
