@@ -2,13 +2,12 @@
 layout:             post
 title:              "Working with HttpClient"
 menutitle:          "Working with HttpClient"
-date:               2017-07-01 07:23:00
+date:               2018-07-01 07:23:00
 category:           CSharp
 author:             adimoraret
 language:           EN
 comments:           false
 published:          false
-todo: Rename title, find 2 minutest time_wait settings;
 ---
 HttpClient looked very easy to use. Luckily before using it, I did a little research. Here are the most important findings about using HttpClient:
 * use HttpClient as a singleton object

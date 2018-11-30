@@ -2,7 +2,7 @@
 layout:             post
 title:              "Async Await in AWS Lambda functions"
 menutitle:          "Async Await in AWS Lambda functions"
-date:               2017-07-26 07:23:00
+date:               2018-07-26 07:23:00
 category:           AWS
 author:             adimoraret
 language:           EN

@@ -2,7 +2,7 @@
 layout:             post
 title:              "Runing ES6 code in AWS lambda"
 menutitle:          "Runing ES6 code in AWS lambda"
-date:               2017-07-25 07:23:00
+date:               2018-07-25 07:23:00
 category:           AWS
 author:             adimoraret
 language:           EN

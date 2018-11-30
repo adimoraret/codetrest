@@ -2,7 +2,7 @@
 layout:             post
 title:              "Run ES6 & async/await code in Goolge Cloud Functions"
 menutitle:          "Run ES6 & async/await code in Goolge Cloud Functions"
-date:               2017-07-27 07:23:00
+date:               2018-07-27 07:23:00
 category:           GoogleCloud
 author:             adimoraret
 language:           EN
