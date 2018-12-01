@@ -1,7 +1,7 @@
 ---
 layout:             post
-title:              "Implementing Service Bus listener in Service Fabric"
-menutitle:          "Implementing Service Bus listener in Service Fabric"
+title:              "Bootstrap Stateless Service in Service Fabric with .Net Core and Ioc"
+menutitle:          "Bootstrap Service Fabric with .Net Core and IoC"
 date:               2018-11-29 07:23:00
 category:           Azure
 author:             adimoraret
@@ -11,12 +11,13 @@ published:          true
 ---
 ## What I will implement ##
 I'll create a Service Fabric stateless service in .Net Core 2.1. This service will be connected to an Azure Service Bus queue. I'll use Microsoft.Extensions.DependencyInjection for IoC and Microsoft.Extensions.Configuration to read application configuration file. 
+
 Technologies and methods:
 * Azure Service Fabric
 * Azure Service Bus
 * .Net Core 2.1
-* IoC
-* Environment configuration
+* IoC - Microsoft.Extensions.DependencyInjection
+* Environment configuration - Microsoft.Extensions.Configuration
 * Visual Studio 2017
 
 ## Creating Visual Studio Project ##
@@ -44,7 +45,7 @@ private static ServiceBusProcessor CreateServiceBusProcessor(
     return new ServiceBusProcessor(context);
 }
 ```
-Now in ServiceBusProcessor, I'll install the following NuGet packages
+Now in ServiceBusProcessor, I'll install the following NuGet packages:
 * Microsoft.Extensions.DependencyInjection, 
 * Microsoft.Extensions.Configuration, 
 * Microsoft.Extensions.Configuration.Json, 
@@ -64,7 +65,7 @@ private static string GetEnvironmentName()
 ```
 It's always a must to have environmental based configuration. I really like the new application configuration structure introduced by .NET Core. So I'll create 3 application configuration files and I'll make sure they're copied to output directory (right click -> properties):
 * appsettings.Development.json
-* appsettings.Stagig.json
+* appsettings.Staging.json
 * appsettings.Production.json
 And here is how we can reference them from our service depending on the environment.
 ```csharp
