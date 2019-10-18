@@ -11,46 +11,68 @@ published:          false
 ---
 ## What is the problem with if/else ##
 Adding if/else branches increases the cyclomatic complexity of the code. A high cyclomatic complexity is hard to read no matter how well the code is written. Consider the following example.
-
 ```csharp
-    var promotion = _promotionRepository.GetPromotion(discountCode);
-    if (promotion.IsValid())
-    {
-        _checkoutCart.ApplyPromotion(promotion);
-    }
-    else
-    {
-        _notificationService.SendWarning(`Invalid discount code: ${discountCode}`);
+    public decimal RoundAssetValue(Coin coin, decimal value){
+        if (coin == Coin.FIAT) 
+        {
+            return Math.Round(value, 2, MidpointRounding.AwayFromZero)
+        }
+        else if (coin == Coin.BTC)
+        {
+            return Math.Round(value, 8, MidpointRounding.AwayFromZero) 
+        }
+        else if (coin == Coin.XRP)
+        {
+            return Math.Round(value, 6, MidpointRounding.AwayFromZero) 
+        }
     }
 ```
-The above code has a cyclomatic complexity of 2. It is not too high, but it's easy to imagine few extra verifications which will increase it. How can we re-write this so we'll get to a cyclomatic complexity of 1?
+The above code has a cyclomatic complexity of 2. Every time an if/else is added, cyclomatic complexity is increased with one. When there are no ifs, or looping instructions, this complexity is equal to 1.
+Of course there are some other problems with this: it violates Open/Closed principle because every time we need to introduce a coin we'll need to change this function. So this function will not be closed to modifications.
 
+Ways to avoid this:
 ### Using a dictionary ###
-We could use a dictionary
+There are some aproaches to use dictionary. Personally, I'm not a fan of this.
 ```csharp
-    var promotion = _promotionRepository.GetPromotion(discountCode);
-    var promotionActions = new Dictionary<bool, Action>
+   //Define our dictionary:
+    var coinRoundings = new Dictionary<Coin, decimal>
     {
-        {true, () => _checkoutCart.ApplyPromotion(promotion)},
-        {false, () =>  _notificationService.SendWarning(`Invalid discount code: ${discountCode}`);}
-    };
-    promotionActions[promotion.IsValid()].Call();    
+       {Coin.FIAT, (x) => Math.Round(x, 2, MidpointRounding.AwayFromZero) },
+       {Coin.BTC, (x) => Math.Round(x, 8, MidpointRounding.AwayFromZero) },
+       {Coin.XRP, (x) => Math.Round(x, 6, MidpointRounding.AwayFromZero) },
+    } 
+    //Result
+    const myTestCoin = Coin.BTC;
+    var result = coinRoundings[myTestCoin].call(9.304);
 ```
-But, what if there are 3,4,5 or more conditions? The dictionary from above would not help us in the following example, well at least not in that form. 
-```csharp
-    var promotion = _promotionRepository.GetPromotion(discountCode);
-    if (promotion.IsValid())
-    {
-        _checkoutCart.ApplyPromotion(promotion);
-    }
-    else if (promotion.IsExpired())
-    {
-        _notificationService.SendWarning(`Discount code: ${discountCode} has expired`);
-    }
-    else 
-    {
-        _notificationService.SendWarning(`Invalid discount code: ${discountCode}`);
-    }
-```
+There are a lot of disadvantages with this approach:
+1. It is hard to read
+1. It introduces reflection code
+1. It is not scalable.
+1. It violates Open/Closed principle
 
-### Using the visitor pattern ###
+### Using inheritance ###
+Using template design pattern we could create something like this.
+```csharp
+    public abstract class CoinRounding
+    {
+        public abstract int NumberOfDecimals { get; }
+        public decimal Round(decimal value) => Math.Round(value, NumberOfDecimals, MidpointRounding.AwayFromZero);
+    }
+    public abstract class FiatRounding
+    {
+        public override int NumberOfDecimals { get; } = 2;
+    }
+    public abstract class BtcRounding
+    {
+        public override int NumberOfDecimals { get; } = 8;
+    }
+    public abstract class XrpRounding
+    {
+        public override int NumberOfDecimals { get; } = 6;
+    }
+    //usage
+    const myTestCoin = Coin.BTC;
+    CoinRounding coinRounding = coinRoundingFactory.create(myTestCoin);
+    const result = coinRounding.Round(123.8405890348509);
+```
