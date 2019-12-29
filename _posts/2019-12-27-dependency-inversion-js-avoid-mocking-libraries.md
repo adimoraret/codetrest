@@ -24,7 +24,7 @@ According to wikipedia, "In computing, an interface is a shared boundary across 
 
 ```javascript
 async function getCurrentTemperature(zipCode){
-    var thirdPartyApi = new ThirdPartyApi("key", "secret");
+    var thirdPartyApi = new ThirdPartyApi('key', 'secret');
     const temperature = await thirdPartyApi.getCurrentTemperature(zipCode);
     console.log(`Result: ${JSON.stringyfy(temperature)}`);
     return temperature.now;
