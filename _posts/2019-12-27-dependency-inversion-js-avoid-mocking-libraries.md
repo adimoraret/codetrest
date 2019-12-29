@@ -24,7 +24,7 @@ According to wikipedia, "In computing, an interface is a shared boundary across 
 
 ```javascript
 async function getCurrentTemperature(zipCode){
-    var thirdPartyApi = new ThirdPartyApi("some-api-key", "some-api-secret");
+    var thirdPartyApi = new ThirdPartyApi("key", "secret");
     const temperature = await thirdPartyApi.getCurrentTemperature(zipCode);
     console.log(`Result: ${JSON.stringyfy(temperature)}`);
     return temperature.now;
@@ -45,12 +45,15 @@ async function getCurrentTemperature(zipCode, temperatureApi, log){
 ```
 In production code we could call it like this:
 ```javascript
-const thirdPartyApi = new ThirdPartyApi(process.env.thirdPartyApiKey, process.env.thirdPartyApiSecret);
-const currentTemperature = await getCurrentTemperature(zipCode, thirdPartyApi, console.log)
+const thirdPartyApi = new ThirdPartyApi(process.env.key, process.env.secret);
+const currentTemperature = await getCurrentTemperature(zipCode, thirdPartyApi, console.log);
 ```
 And in our unit test we would test the function like this:
 ```javascript
-const mockApi = { getCurrentTemperature: (zipCode) => ( now: { fahrenheit: 86, celsius: 30 }) }; 
+const fahrenheit = 86;
+const celsius = 30;
+const sampleResponse = { now: { fahrenheit, celsius } };
+const mockApi = { getCurrentTemperature: (zipCode) => ( sampleResponse ) }; 
 const noLog = (message) => {};
 await getCurrentTemperature(zipCode, mockApi, noLog)
 ```
@@ -89,7 +92,7 @@ async function getCurrentTemperature(zipCode, temperatureApi, log){
 
 When application starts, we need to inject real implementations:
 ```javascript
-IoC.thirdPartyApi = new ThirdPartyApi(process.env.thirdPartyApiKey, process.env.thirdPartyApiSecret);
+IoC.thirdPartyApi = new ThirdPartyApi(process.env.key, process.env.secret);
 IoC.log = console.log;
 ```
 
