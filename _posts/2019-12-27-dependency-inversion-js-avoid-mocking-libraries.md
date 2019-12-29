@@ -9,11 +9,12 @@ language:           EN
 comments:           false
 published:          true
 ---
-## What is the problem with mocking libraries ##
+## What is the problem with mocking libraries 
 I've seen a lot of problems with mocking libraries: 
 1. They come with their own set of rules, 
 1. They have their own syntax
 1. Code is hard to read/review for someone who is not familiar with the framework. 
+
 This happens in all languages that I've worked with. However, in languages that support interfaces, it's easy to use. If your production code depends on an interface, rather than a concrete implementation, then in your test you can create a test-class that inherits from the interface and inject the test-class instead of the real-class. This is Dependency Inversion principle. That's because according to this principle High Level modules should not depend on Low Level modules. Implementations are details (low level) and they should depend on abstractions (high level). Interfaces are abstractions and they should not depend on details. 
 But what can we do in JavaScript since there are no interfaces?
 
@@ -32,6 +33,7 @@ async function getCurrentTemperature(zipCode){
 As we can see, this small function depends on two components:
 1. A Third Party Api that provides temperature for a given zip code
 2. A logging component that logs the api response
+
 Writing a unit test for this is not straight forward because, when running this function, it will try to access the third party Api, and we'll need to provide some credentials as part of the test setup. There are some libraries which can mock the http response for given urls. Nock, is one of them. But this works only in HTTP world. What if we depend on a module that does I/O operations like file read/write?
 How can we abstract these dependencies? One way is to have something like this:
 ```javascript
