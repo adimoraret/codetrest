@@ -45,7 +45,7 @@ async function getCurrentTemperature(zipCode, temperatureApi, log){
 ```
 In production code we could call it like this:
 ```javascript
-const thirdPartyApi = new ThirdPartyApi(process.env.key, process.env.secret);
+const thirdPartyApi = new ThirdPartyApi('key', 'secret');
 const currentTemperature = await getCurrentTemperature(zipCode, thirdPartyApi, console.log);
 ```
 And in our unit test we would test the function like this:
