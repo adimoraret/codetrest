@@ -102,7 +102,9 @@ When testing, we need to inject mocked implementations
     const fahrenheit = 86;
     const celsius = 30;
     IoC.log = () => { };
-    IoC.thirdPartyApi = { getCurrentTemperature: () => ({ now: { fahrenheit, celsius } }) };
+    IoC.thirdPartyApi = { getCurrentTemperature: () => ({ 
+        now: { fahrenheit, celsius } 
+    }) };
 
     const temperature = await getCurrentTemperature('90210');
 
@@ -116,7 +118,9 @@ When testing, we need to inject mocked implementations
     const celsius = 30;
     let isLogCalled = false;
     IoC.log = () => { isLogCalled = true; };
-    IoC.thirdPartyApi = { getCurrentTemperature: () => ({ now: { fahrenheit, celsius } }) };
+    IoC.thirdPartyApi = { getCurrentTemperature: () => ({ 
+        now: { fahrenheit, celsius } 
+    }) };
 
     await getCurrentTemperature('90210');
     expect(isLogCalled).to.equal(true);
