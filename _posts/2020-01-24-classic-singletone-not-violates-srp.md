@@ -7,7 +7,7 @@ category:           CSharp
 author:             adimoraret 
 language:           EN 
 comments:           false 
-published:          false 
+published:          true 
 --- 
 
 ## Classical Singleton Design Pattern ## 
