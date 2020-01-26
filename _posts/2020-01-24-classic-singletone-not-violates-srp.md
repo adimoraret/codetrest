@@ -119,3 +119,5 @@ public sealed partial class MySingleton
 ``` 
 
 I'm not a fan of partial classes, I try to avoid using them, but this is a way we can separate the behavior of the type vs the behavior of the instance although it's the same class. 
+
+Examples from this post can be found on GitHub [here](https://github.com/adimoraret/singleton-srp)
