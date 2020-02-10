@@ -49,6 +49,7 @@ Since we care about behavior, then we should expect these behaviors:
  - a state tax is applied to the product's original price
  - result is determined by the sum of the original price and the result of the above operation
  - since the result might have more than two decimals, we'll need to round final result to 2 decimals.
+
 So, we put the behavior that we want to test behind some interfaces that would help us mocking the behavior in a unit test. Something like this.
 ```csharp
 public interface IPriceHelper
