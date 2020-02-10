@@ -14,6 +14,7 @@ published:          true
 There are two main schools of thoughts regarding unit testing:
 - Chicago style which focuses on results
 - London style which focuses on behavior
+
 Whenever I want to test algorithms or formulas, I use London style testing. Here is a simple example: Let's say we want to calculate final price of a product for a given state tax.
 
 ## Chicago style ##
