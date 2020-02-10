@@ -1,7 +1,7 @@
 --- 
 layout:             post 
-title:              "Testing algorithms (London vs Chicago)" 
-menutitle:          "Testing algorithms (London vs Chicago)" 
+title:              "Testing algorithms or formulas (London vs Chicago)" 
+menutitle:          "Testing algorithms or formulas (London vs Chicago)" 
 date:               2020-02-02 07:21:00 
 category:           CSharp
 author:             adimoraret 
