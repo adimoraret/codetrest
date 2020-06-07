@@ -3,7 +3,7 @@ layout:             post
 title:              "TDD Cache case study in csharp" 
 menutitle:          "TDD Cache case study in csharp" 
 date:               2020-05-07 07:21:00 
-category:           TDD, CSharp
+category:           TDD;Csharp
 author:             adimoraret 
 language:           EN 
 comments:           false 
